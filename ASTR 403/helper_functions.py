@@ -2,12 +2,12 @@ from numpy import log10
 import numpy as np
 
 
-def get_data(file_name):
+def get_data(file_name): # getting the data from the textfile
     f = open(file_name, "r")
     first_line = f.readline()  # skipping the first line
-    zcdm = []
-    mb = []
-    dmb = []
+    zcdm = [] # redshift
+    mb = [] # magnitude
+    dmb = [] # error
     for line in f:
         list = line.split(' ')
         zcdm.append(float(list[1]))
@@ -19,31 +19,31 @@ def get_data(file_name):
 # ----------------- NUMBER 1 --------------------
 
 
-def get_distance_modulus(mb, Mb):
+def get_distance_modulus(mb, Mb): # finding distance modulus with magnitude
     return mb - Mb
 
 
 # ----------------- NUMBER 2 --------------------
 
 
-def get_q0(OM, OL):
+def get_q0(OM, OL): # (didn't end up being used) finding the deceleration paramter
     return (1/2)*OM - OL
 
 
-def get_mu_LCDM(H0, z, q0):
+def get_mu_LCDM(H0, z, q0): # (didn't end up being used) finding the mu_LCDM 
     return 43.23 - 5*log10(H0/68) + 5*log10(z) + 1.086*(1-q0)*z
 
 
 # ----------------- NUMBER 3 --------------------
 
 
-def get_diff_distance_modulus(mb, LCDM):
+def get_diff_distance_modulus(mb, LCDM): # finding the residuals 
     return mb - LCDM
 
 
 # ----------------- NUMBER 6 --------------------
 # -.-.-.-.-.-.-.-.- TUTORIAL-.-.-.-.-.-.-.-.-.-.-.
-
+# all of these are copied and pasted from the tutorial mentioned to make sure emcee worked properly
 
 def double_exp(x, a1, t1, a2, t2):
     return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
@@ -71,12 +71,6 @@ def log_probability(theta, x, y, yerr):
     return lp + log_likelihood(theta, x, y, yerr)
 
 
-# -.-.-.-.-.-.-.- FIT FOR MODEL-.-.-.-.-.-.-.-.-.-
-
-
-def model_equation(x, OM, H0):
-    OL = 1 - OM
-    return 43.23 - 5*log10(H0/68) + 5*log10(x) + 1.086*(1-((1/2)*OM - OL))*x
 
 
 
